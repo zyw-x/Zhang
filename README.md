@@ -114,7 +114,3 @@ We evaluated associations between TMFI and:
 
 ### DGIdb
 - Drug–gene interaction database
-
----
-
-## Repository Structure
