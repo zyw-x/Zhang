@@ -1,0 +1,59 @@
+#------------- LD clumping ---------------------
+phen = 'total'
+setwd('gwas/prs')
+results_auto = fread("./fastGWA.fastGWA")
+
+bfile = "./1kg.v3/EUR" 
+
+for(cutoff in c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.00000005)){
+  sig_auto = results_auto[results_auto$P<cutoff,]
+  sig_auto = dplyr::rename(sig_auto, rsid=SNP, pval=P)
+  
+  clump_iv = ld_clump(dat = sig_auto, 
+                      clump_kb = 5000,
+                      clump_r2 = 0.01,
+                      clump_p = 1,
+                      plink_bin = genetics.binaRies::get_plink_binary(),
+                      bfile = bfile,
+                      pop = "EUR"
+  )
+    print(nrow(clump_iv))
+  
+  write.table(clump_iv$rsid, file=paste0("./clump_",cutoff,".txt"),row.names = F,
+              col.names = F, quote = F)
+  
+  write.table(clump_iv, file=paste0("./gwas_clump_",cutoff,".txt"),row.names = F, quote = F)
+  print(sum(duplicated(clump_iv$rsid)))
+}
+col_names <- c('rsid')
+snp = fread('./clump_0.00000005.txt',col.names = col_names, skip = 0)
+sig_auto = results_auto[results_auto$P<cutoff,]
+sig_auto = dplyr::rename(sig_auto, rsid=SNP, pval=P)
+clump_iv <- inner_join(sig_auto, snp)
+write.table(clump_iv, file=paste0("./gwas_clump_",cutoff,".txt"),row.names = F, quote = F)
+
+#------------- PRS ---------------------
+phen='total'
+gwas_result=${folder}prs/clump/gwas_clump_${cutoff}.txt
+
+cutoffs=(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.00000005)
+
+for co in "${cutoffs[@]}"
+do
+    gwas_result=${folder}prs/clump/gwas_clump_${co}.txt
+
+    for chr in {1..22}
+    do
+        echo "Running chr${chr}  cutoff=${co}"
+
+        plink2 \
+          --bfile ${folder}info_pass/${chr} \
+          --score ${gwas_result} 2 4 8 header list-variants cols=+scoresums \
+          --extract ${folder}prs/clump/clump_${co}.txt \
+          --out ${folder}prs/${phen}/clump_${co}/chr${chr}
+    done
+done
+
+
+
+

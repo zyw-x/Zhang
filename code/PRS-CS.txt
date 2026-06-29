@@ -1,0 +1,30 @@
+# ----------------- PRS-CS --------------------------------
+for chr in {1..22}
+do
+
+echo "===== Chromosome ${chr} started at $(date) ====="
+
+python ./PRScs.py \
+--ref_dir=./ldblk_1kg_eur \
+--bim_prefix=./${chr} \
+--sst_file=./PRSCS_input.txt \
+--n_gwas=46347 \
+--chrom=${chr} \
+--out_dir=./PRSCS_output
+
+echo "===== Chromosome ${chr} finished at $(date) ====="
+
+done
+
+
+# ----------------------------- PRS ------------------------------
+for chr in {1..22}
+do
+
+plink2 \
+--bfile chr${chr}/chr${chr}_prscs \
+--keep nonGWAS.keep \
+--score PRSCS_all_β.txt 2 4 6 cols=+scoresums \
+--out chr${chr}_score
+
+done
