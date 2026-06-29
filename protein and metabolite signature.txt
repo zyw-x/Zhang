@@ -1,0 +1,50 @@
+import numpy as np
+import pandas as pd
+import keras
+from keras.models import Sequential
+from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.preprocessing import StandardScaler
+from keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D, AveragePooling1D, GRU, GlobalMaxPooling1D, GlobalAveragePooling1D
+import matplotlib.pyplot as plt
+import seaborn as sns
+import tensorflow as tf
+
+data_mate = pd.read_csv('/path_to_data/data.csv')
+X = data_mate.iloc[:, 2:]
+y = data_mate['total']
+
+y = data_mate['total'].values
+X = np.expand_dims(data_mate.iloc[:, 2:].values.astype(float), axis=2)
+
+X_train, X_test, Y_train, Y_test = train_test_split(X , y, test_size=0.2,random_state=42)
+from tensorflow.keras.optimizers import Adam
+
+model = Sequential()
+model.add(Conv1D(64, 2, activation='selu', input_shape=input_shape, kernel_initializer=LecunNormal()))
+model.add(Conv1D(64, 2, activation='selu'), kernel_initializer=LecunNormal())
+model.add(MaxPooling1D(2))
+
+model.add(Conv1D(64, 2, activation='selu'), kernel_initializer=LecunNormal())
+model.add(Conv1D(64, 2, activation='selu'), kernel_initializer=LecunNormal())
+model.add(MaxPooling1D(2))
+
+model.add(Conv1D(64, 2, activation='selu'), kernel_initializer=LecunNormal())
+model.add(Conv1D(64, 2, activation='selu'), kernel_initializer=LecunNormal())
+model.add(MaxPooling1D(2))
+
+model.add(Flatten())
+model.add(Dense(64, activation='selu'), kernel_initializer=LecunNormal()) 
+model.add(Dense(1, activation='linear'))
+print(model.summary())
+
+optimizers = Adam(learning_rate=0.0001, beta_1=0.9, beta_2=0.999, epsilon=1e-7, decay=0.0, amsgrad=False)
+
+model.compile(optimizer=optimizers, loss='mean_squared_error', metrics=['mean_absolute_error'])
+
+from tensorflow.keras.callbacks import EarlyStopping
+callback = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+model.compile(optimizer=optimizers, loss='mean_squared_error', metrics=['mae'])
+
+history = model.fit(X_train, Y_train, validation_split=0.20, epochs=200, batch_size=256,callbacks=[callback])
+
+
