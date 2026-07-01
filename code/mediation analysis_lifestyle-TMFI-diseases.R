@@ -80,6 +80,7 @@ for (life in lifes) {
     time <- paste0(disease, '_time')
     data.md <- data[,c(disease, time, 'total',life,'sex','age_i0','age_i2', 'p53_time','education_class','Mixed' , 'Asian', 'Black', 'Chinese', 'others')]
     colnames(data.md) <- c('status','time', 'total',life,'sex','age_i0','age_i2', 'p53_time','education_class','Mixed' , 'Asian', 'Black', 'Chinese', 'others')
+    data.md <- na.omit(data.md)
     
     G <- 1000
     
