@@ -33,7 +33,7 @@ boot.med <- function(data, mediator, exposure, outcome, covariates) {
 outcome <- 'total'
 mediators <- colnames(data[,16:266])
 exposure <- 'prs'
-covariates = "sex + age_i0 + p53_time + education_class"
+covariates = "sex + age_i2 + p53_time + education_class"
 set.seed(123)
 
 
@@ -44,7 +44,7 @@ result.m <- data.frame(result.m)
 rownames(result.m) <- mediators
 
 for (mediator in mediators) {
-  data.md <- data[,c(outcome, mediator, exposure,'sex','age_i2', 'p53_time','education_class')]
+  data.md <- data[,c(outcome, mediator, exposure,'sex','age_i0','age_i2','p53_time','education_class')]
   data.md <- na.omit(data.md)
 
   G <- 1000
