@@ -25,7 +25,7 @@ for (i in 1:length(muscle_vars)) {
   
   
   for (cor in cors_i0) {
-    data.cor <- data[, c("sex", "age_i0", muscle_var, cor,
+    data.cor <- data[, c("sex", "age_i2", muscle_var, cor,
                          "education_class", 'Mixed', 'Asian', 'Black', 'Chinese', 
                          'others', 'p53_time')]
     data.cor <- na.omit(data.cor)
@@ -33,7 +33,7 @@ for (i in 1:length(muscle_vars)) {
     pcor_result <- pcor.test(
       x = data.cor[[muscle_var]], 
       y = data.cor[[cor]],
-      z = data.cor[, c("sex", "age_i0", "education_class",
+      z = data.cor[, c("sex", "age_i2", "education_class",
                        'Mixed', 'Asian', 'Black', 'Chinese', 
                        'others', 'p53_time')],
       method = "pearson"  
