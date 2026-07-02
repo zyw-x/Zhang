@@ -44,7 +44,7 @@ result.m <- data.frame(result.m)
 rownames(result.m) <- mediators
 
 for (mediator in mediators) {
-  data.md <- data[,c(outcome, mediator, exposure,'sex','age_i0', 'p53_time','education_class')]
+  data.md <- data[,c(outcome, mediator, exposure,'sex','age_i2', 'p53_time','education_class')]
   data.md <- na.omit(data.md)
 
   G <- 1000
