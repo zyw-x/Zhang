@@ -65,7 +65,7 @@ exposures <- c("highactivity","diet_i0_score","obesity","longsleep","shortsleep"
                "smoke_pack","drink")
 outcome <- 'total'
 mediators <- colnames(data[,61:2983])
-covariates <- "sex + age_i0 + p53_time + Mixed + Asian + Black + Chinese + others + education_class"
+covariates <- "sex + age_i2 + p53_time + Mixed + Asian + Black + Chinese + others + education_class"
 set.seed(123)
 
 num_cores <- 120
@@ -77,7 +77,7 @@ for (exposure in exposures) {
   rownames(result.m) <- mediators
   
   for (mediator in mediators) {
-    data.md <- data[,c(outcome, mediator, exposure,'sex','age_i2', 'p53_time','education_class','Mixed' , 'Asian', 'Black', 'Chinese', 'others')]
+    data.md <- data[,c(outcome, mediator, exposure,'sex','age_i0','age_i2', 'p53_time','education_class','Mixed' , 'Asian', 'Black', 'Chinese', 'others')]
     data.md <- na.omit(data.md)
     G <- 1000
     
