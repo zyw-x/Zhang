@@ -9,7 +9,7 @@ data$Chinese <- as.factor(data$Chinese)
 data$others <- as.factor(data$others)
 colnames(data)
 
-covariates <- c("age_i0" ,"total","sex","Mixed","Asian",                      
+covariates <- c("age_i2" ,"total","sex","Mixed","Asian",                      
                 "Black","Chinese","others","education_class" ,"p53_time")
 
 data.sleep <- na.omit(data[,c(covariates,'sleep_duration')])
