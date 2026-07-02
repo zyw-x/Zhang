@@ -77,10 +77,11 @@ for (exposure in exposures) {
   rownames(result.m) <- mediators
   
   for (mediator in mediators) {
-    
+    data.md <- data[,c(outcome, mediator, exposure,'sex','age_i2', 'p53_time','education_class','Mixed' , 'Asian', 'Black', 'Chinese', 'others')]
+    data.md <- na.omit(data.md)
     G <- 1000
     
-    med.boot.cox <- mclapply(1:G, FUN = function(i) boot.med(data, mediator, exposure, outcome, covariates), mc.cores = num_cores)
+    med.boot.cox <- mclapply(1:G, FUN = function(i) boot.med(data.md, mediator, exposure, outcome, covariates), mc.cores = num_cores)
     
     saveRDS(med.boot.cox, file = paste0('/path_to_save/', mediator,'_',exposure,'_protein.rds'))
     
